@@ -39,7 +39,7 @@ def approximate_pi(n):
     plt.ylabel("y")
     plt.legend()
     plt.grid(alpha=0.5)
-    #plt.savefig("circle100000.png", bbox_inches="tight")
+    #plt.savefig(f"\Users\jaer2468\Projects\circle{n}.png", bbox_inches="tight")
     #plt.show()
 
     return approx_pi
@@ -135,7 +135,7 @@ def main():
     sphere_volume_numba(n, d)
     stop = pc()
 
-    print(f"What is numba time?: {stop-start}s")
+    print(f"What is numba time?: {stop-start} s")
     print()
 
     # Exc4
@@ -144,7 +144,7 @@ def main():
     start = pc()
     sphere_volume(n, d)
     stop = pc()
-    print(f"Exc4: Sequential time of {d} and {n}: {stop-start}")
+    print(f"Exc4: Sequential time of {d} and {n}: {stop-start} s")
         # 4.53 s
         # 4.58 s
         # 4.52 s
@@ -164,7 +164,7 @@ def main():
         total = sum(results)
 
     stop=pc()
-    print(f"What is parallel time?: {stop-start}")
+    print(f"What is parallel time?: {stop-start} s")
         # 2.88 s
         # 2.96 s
         # 2.91 s
