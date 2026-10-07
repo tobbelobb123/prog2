@@ -84,7 +84,9 @@ def sphere_volume_numba(n:int, d:int)->float:
 
 
 #Exc4: parallel code - parallelize actual computations by splitting data
-def sphere_volume_(n, d, vs):
+def sphere_volume_(n, d):
+    vs = [[random.uniform(-1,1) for ii in range(1, d+1)] for jj in range(n)]
+    
     def inside_sphere(v):
         if reduce(lambda x,y : x + y**2, v, 0) <= 1:
             return True
@@ -93,19 +95,20 @@ def sphere_volume_(n, d, vs):
     nc = list(filter(inside_sphere, vs))
 
     return len(nc) * 2**d / n
+
     
 def sphere_volume_parallel(n, d, np=10):
-    vs = [[random.uniform(-1,1) for ii in range(1, d+1)] for jj in range(n)]
-
-    chunk = len(vs) // np
-    processes = [vs[i:i + chunk] for i in range(0, len(vs), chunk)]
-
+    chunk = n // np
+    processes = [chunk for ii in range(np)]
+    
     with future.ProcessPoolExecutor(np) as ex:
 
-        futures = [ex.submit(sphere_volume_, n, d, process) for process in processes]
+        futures = [ex.submit(sphere_volume_, process, d) for process in processes]
         results = [f.result() for f in futures]
 
         total = sum(results)
+        
+    return total
 
 
 
