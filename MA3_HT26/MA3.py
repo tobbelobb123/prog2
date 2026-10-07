@@ -61,10 +61,8 @@ def sphere_volume(n, d):
 
 #Exc2, real value
 def hypersphere_exact(n, d):
-    # n is the number of points
-
-    # d is the number of dimensions of the sphere 
     V = m.pi**(d/2) / m.gamma((d/2 + 1))
+
     return V
 
 
@@ -122,7 +120,7 @@ def main():
     n = 1000000
     d = 11
     start = pc()
-    #sphere_volume(n, d)
+    sphere_volume(n, d)
     stop = pc()
     print(f"Exc3: Sequential time of {d} and {n}: {stop-start}s")
         # run1: 5.883s
@@ -134,7 +132,7 @@ def main():
         # run3: 1.624s
 
     start = pc()
-    #sphere_volume_numba(n, d)
+    sphere_volume_numba(n, d)
     stop = pc()
 
     print(f"What is numba time?: {stop-start}s")
@@ -166,7 +164,7 @@ def main():
         total = sum(results)
 
     stop=pc()
-    print(f"Exc4: Paralell time of {d} and {n}: {stop-start}")
+    print(f"What is parallel time?: {stop-start}")
         # 2.88 s
         # 2.96 s
         # 2.91 s
