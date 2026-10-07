@@ -84,7 +84,7 @@ def sphere_volume_numba(n:int, d:int)->float:
 
 
 #Exc4: parallel code - parallelize actual computations by splitting data
-def sphere_volume_parallel(n, d, vs, np=10):
+def sphere_volume_(n, d, vs):
     def inside_sphere(v):
         if reduce(lambda x,y : x + y**2, v, 0) <= 1:
             return True
@@ -93,6 +93,19 @@ def sphere_volume_parallel(n, d, vs, np=10):
     nc = list(filter(inside_sphere, vs))
 
     return len(nc) * 2**d / n
+    
+def sphere_volume_parallel(n, d, np=10):
+    vs = [[random.uniform(-1,1) for ii in range(1, d+1)] for jj in range(n)]
+
+    chunk = len(vs) // np
+    processes = [vs[i:i + chunk] for i in range(0, len(vs), chunk)]
+
+    with future.ProcessPoolExecutor(np) as ex:
+
+        futures = [ex.submit(sphere_volume_, n, d, process) for process in processes]
+        results = [f.result() for f in futures]
+
+        total = sum(results)
 
 
 
@@ -150,18 +163,7 @@ def main():
 
 
     start=pc()
-    vs = [[random.uniform(-1,1) for ii in range(1, d+1)] for jj in range(n)]
-    chunk = len(vs) // 10
-
-    processes = [vs[i:i + chunk] for i in range(0, len(vs), chunk)]
-
-    with future.ProcessPoolExecutor(10) as ex:
-
-        futures = [ex.submit(sphere_volume_parallel, n, d, process) for process in processes]
-        results = [f.result() for f in futures]
-
-        total = sum(results)
-
+    sphere_volume_parallel(n,d,10)
     stop=pc()
     print(f"What is parallel time?: {stop-start} s")
         # 14.93 s
