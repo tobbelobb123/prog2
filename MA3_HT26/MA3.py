@@ -149,13 +149,12 @@ def main():
         # 4.58 s
         # 4.52 s
 
-
+    start=pc()
     vs = [[random.uniform(-1,1) for ii in range(1, d+1)] for jj in range(n)]
     chunk = len(vs) // 10
 
     processes = [vs[i:i + chunk] for i in range(0, len(vs), chunk)]
 
-    start=pc()
     with future.ProcessPoolExecutor(10) as ex:
 
         futures = [ex.submit(sphere_volume_parallel2, n, d, process) for process in processes]
